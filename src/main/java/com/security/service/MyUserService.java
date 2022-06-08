@@ -18,18 +18,18 @@ import java.util.HashSet;
 
 @Service
 public class MyUserService implements UserDetailsService {
-    private Logger logger = LoggerFactory.getLogger(MyUserService.class);
+    private final Logger logger = LoggerFactory.getLogger(MyUserService.class);
     private final MyUserRepository myUserRepository;
-
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
     public MyUserService(MyUserRepository myUserRepository) {
         this.myUserRepository = myUserRepository;
-        this.addUser(new MyUser(1L, "admin", "admin", new HashSet<>(Collections.singletonList(new Role("ROLE_ADMIN")))));
+        this.addUser(new MyUser(1L, "admin", "admin", new HashSet<>(Collections.singletonList(new Role("ROLE_ADMIN"))), true, true));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("load user: " + username);
+        logger.info("load user from db: " + username);
         return myUserRepository.getFirstByUsername(username);
     }
 
@@ -37,7 +37,7 @@ public class MyUserService implements UserDetailsService {
         logger.info("add user: " + myUser.getUsername());
         if (loadUserByUsername(myUser.getUsername()) != null) return false;
         logger.info("success");
-        myUser.setPassword(new BCryptPasswordEncoder().encode(myUser.getPassword()));
+        myUser.setPassword(bCryptPasswordEncoder.encode(myUser.getPassword()));
         myUserRepository.save(myUser);
         return true;
     }

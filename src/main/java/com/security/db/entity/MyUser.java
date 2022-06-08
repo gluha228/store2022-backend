@@ -24,7 +24,8 @@ public class MyUser implements UserDetails {
     private String password;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Role> authorities;
-
+    private Boolean unlocked = true;
+    private Boolean enabled = true;
     public MyUser(String username, String password) {
         this.username = username;
         this.password = password;
@@ -53,7 +54,7 @@ public class MyUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.unlocked;
     }
 
     @Override
@@ -63,6 +64,6 @@ public class MyUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

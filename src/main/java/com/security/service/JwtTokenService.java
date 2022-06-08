@@ -1,12 +1,10 @@
 package com.security.service;
 
-import com.security.db.entity.MyUser;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,9 +13,8 @@ import java.util.Date;
 public class JwtTokenService {
     private static final String secret = "top_secret_228";
     private static final Long tokenLifeTimeMinutes = 15L;
-    private Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
-    private MyUserService myUserService;
-
+    private final Logger logger = LoggerFactory.getLogger(JwtTokenService.class);
+    private final MyUserService myUserService;
     @Autowired
     public JwtTokenService(MyUserService myUserService) {
         this.myUserService = myUserService;
@@ -36,6 +33,7 @@ public class JwtTokenService {
         }
         catch (SignatureException e) { logger.warn("wrong signature"); }
         catch (MalformedJwtException e) { logger.warn("invalid token"); }
+        catch (ExpiredJwtException e) { logger.warn("expired token"); }
         return null;
     }
 
