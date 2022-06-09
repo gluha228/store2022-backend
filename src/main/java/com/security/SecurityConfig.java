@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -21,12 +22,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final MyUserDetailsService myUserService;
     private final RequestFilter requestFilter;
-    private final AuthEntryPoint authEntryPoint;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
-    public SecurityConfig(MyUserDetailsService myUserService, RequestFilter requestFilter, AuthEntryPoint authEntryPoint) {
+    public SecurityConfig(MyUserDetailsService myUserService, RequestFilter requestFilter, AuthenticationEntryPoint authenticationEntryPoint) {
         this.myUserService = myUserService;
         this.requestFilter = requestFilter;
-        this.authEntryPoint = authEntryPoint;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Autowired
@@ -53,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(authEntryPoint)
+                .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
     }

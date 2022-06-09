@@ -29,19 +29,16 @@ public class AuthController {
     @PostMapping("/auth")
     public String getToken(@RequestBody LoginForm loginForm) {
         logger.info("auth begin");
-        if (loginForm != null) {
-            logger.info("auth user: " + loginForm);
-            if (loginForm.isFilled()) {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
-            } else {
-                logger.info("unauthorized");
-                return "unauthorized";
-            }
-            logger.info("success");
-            return tokenGenerator.generateToken(userDetailsService.loadUserByUsername(loginForm.getUsername()));
-        } else {
+        if (loginForm == null) {
             logger.info("no auth form is present");
             return "no auth form is present";
         }
+        if (!loginForm.isFilled()) {
+            logger.info("no login or password");
+            return "no login or password";
+        }
+        logger.info("auth: " + loginForm);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
+        return tokenGenerator.generateToken(userDetailsService.loadUserByUsername(loginForm.getUsername()));
     }
 }

@@ -1,7 +1,7 @@
-package com.service;
+package com.content.service;
 
-import com.db.entity.SellingItem;
-import com.db.repository.SellingItemRepository;
+import com.content.db.entity.SellingItem;
+import com.content.db.repository.SellingItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

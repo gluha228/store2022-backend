@@ -1,7 +1,7 @@
-package com.controllers;
+package com.content.controllers;
 
-import com.db.entity.SellingItem;
-import com.service.SellingItemService;
+import com.content.db.entity.SellingItem;
+import com.content.service.SellingItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

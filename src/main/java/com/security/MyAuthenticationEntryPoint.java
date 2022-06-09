@@ -1,0 +1,26 @@
+package com.security;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Serializable;
+
+@Component
+public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
+    private final Logger logger = LoggerFactory.getLogger(MyAuthenticationEntryPoint.class);
+    @Override
+    public void commence(
+            HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException)
+            throws IOException {
+        response.getOutputStream().println("wrong username or password");
+        logger.info("wrong username or password");
+    }
+
+}
