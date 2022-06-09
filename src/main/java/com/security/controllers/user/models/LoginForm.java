@@ -1,4 +1,4 @@
-package com.security.controllers.models;
+package com.security.controllers.user.models;
 
 import lombok.Data;
 

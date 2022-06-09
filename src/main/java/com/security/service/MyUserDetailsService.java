@@ -3,7 +3,6 @@ package com.security.service;
 import com.security.db.entity.MyUser;
 import com.security.db.entity.Role;
 import com.security.db.repository.MyUserRepository;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +16,14 @@ import java.util.Collections;
 import java.util.HashSet;
 
 @Service
-public class MyUserService implements UserDetailsService {
-    private final Logger logger = LoggerFactory.getLogger(MyUserService.class);
+public class MyUserDetailsService implements UserDetailsService {
+    private final Logger logger = LoggerFactory.getLogger(MyUserDetailsService.class);
     private final MyUserRepository myUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
-    public MyUserService(MyUserRepository myUserRepository) {
+    public MyUserDetailsService(MyUserRepository myUserRepository) {
         this.myUserRepository = myUserRepository;
-        this.addUser(new MyUser(1L, "admin", "admin", new HashSet<>(Collections.singletonList(new Role("ROLE_ADMIN"))), true, true));
+        addUser(new MyUser(1L, "admin", "admin", new HashSet<>(Collections.singletonList(new Role("ROLE_ADMIN"))), true, true));
     }
 
     @Override
@@ -33,13 +32,10 @@ public class MyUserService implements UserDetailsService {
         return myUserRepository.getFirstByUsername(username);
     }
 
-    public boolean addUser(MyUser myUser) {
-        logger.info("add user: " + myUser.getUsername());
-        if (loadUserByUsername(myUser.getUsername()) != null) return false;
-        logger.info("success");
+    //нужен только для создания админа
+    private void addUser(MyUser myUser) {
+        if (loadUserByUsername(myUser.getUsername()) != null) return;
         myUser.setPassword(bCryptPasswordEncoder.encode(myUser.getPassword()));
         myUserRepository.save(myUser);
-        return true;
     }
-
 }

@@ -24,12 +24,14 @@ public class MyUser implements UserDetails {
     private String password;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Role> authorities;
-    private Boolean unlocked = true;
-    private Boolean enabled = true;
+    private Boolean unlocked;
+    private Boolean enabled;
     public MyUser(String username, String password) {
         this.username = username;
         this.password = password;
         this.authorities = new HashSet<>(Collections.singletonList(new Role("ROLE_USER")));
+        this.unlocked = true;
+        this.enabled = true;
     }
 
     @Override

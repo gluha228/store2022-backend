@@ -1,6 +1,6 @@
 package com.security;
 
-import com.security.service.MyUserService;
+import com.security.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final MyUserService myUserService;
+    private final MyUserDetailsService myUserService;
     private final RequestFilter requestFilter;
     private final AuthEntryPoint authEntryPoint;
     @Autowired
-    public SecurityConfig(MyUserService myUserService, RequestFilter requestFilter, AuthEntryPoint authEntryPoint) {
+    public SecurityConfig(MyUserDetailsService myUserService, RequestFilter requestFilter, AuthEntryPoint authEntryPoint) {
         this.myUserService = myUserService;
         this.requestFilter = requestFilter;
         this.authEntryPoint = authEntryPoint;

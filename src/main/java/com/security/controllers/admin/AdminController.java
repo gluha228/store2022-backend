@@ -1,4 +1,4 @@
-package com.security.controllers;
+package com.security.controllers.admin;
 
 import com.security.db.entity.MyUser;
 import com.security.db.repository.MyUserRepository;
