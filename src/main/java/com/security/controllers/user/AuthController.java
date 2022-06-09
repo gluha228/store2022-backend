@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 @RestController
 public class AuthController {
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -31,12 +29,19 @@ public class AuthController {
     @PostMapping("/auth")
     public String getToken(@RequestBody LoginForm loginForm) {
         logger.info("auth begin");
-        Objects.requireNonNull(loginForm, "no auth form is present");
-        logger.info("auth user: " + loginForm);
-        if (loginForm.isFilled()) {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
+        if (loginForm != null) {
+            logger.info("auth user: " + loginForm);
+            if (loginForm.isFilled()) {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
+            } else {
+                logger.info("unauthorized");
+                return "unauthorized";
+            }
+            logger.info("success");
+            return tokenGenerator.generateToken(userDetailsService.loadUserByUsername(loginForm.getUsername()));
+        } else {
+            logger.info("no auth form is present");
+            return "no auth form is present";
         }
-        logger.info("auth end");
-        return tokenGenerator.generateToken(userDetailsService.loadUserByUsername(loginForm.getUsername()));
     }
 }
